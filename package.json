@@ -14,7 +14,6 @@
     "build:installer:mac": "bash installer/build-macos.sh",
     "build:site": "powershell -NoProfile -ExecutionPolicy Bypass -File site/build.ps1",
     "preview": "npm run build:site && cd site && firebase emulators:start --only hosting --project demo-artcraftappsmanager",
-    "deploy": "powershell -NoProfile -ExecutionPolicy Bypass -File site/build.ps1 -Deploy",
-    "release": "npm run build:installer && npm run deploy --"
+    "deploy": "powershell -NoProfile -ExecutionPolicy Bypass -File site/build.ps1 -Deploy -KeyFile \"C:/Users/Milroy/Documents/Firebase Keys/getartcraftupdater-firebase-adminsdk-fbsvc-1786769d2e.json\""
   }
 }

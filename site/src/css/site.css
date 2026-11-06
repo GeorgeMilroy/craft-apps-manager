@@ -299,6 +299,8 @@ section h2 {
 .cta h2 { color: inherit; margin: 0; max-width: 12em; }
 .cta .btn-primary { background: var(--invert-fg); border-color: var(--invert-fg); color: var(--invert-bg); }
 .cta .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+.cta .btn:not(.btn-primary) { color: inherit; border-color: color-mix(in srgb, currentColor 45%, transparent); }
+.cta .btn:not(.btn-primary):hover { background: color-mix(in srgb, currentColor 10%, transparent); border-color: currentColor; }
 .cta .meta { color: inherit; opacity: 0.6; }
 
 .foot .wrap { display: flex; flex-wrap: wrap; gap: 12px 32px; padding-top: 28px; padding-bottom: 28px; }

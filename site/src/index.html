@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ArtCraft Apps Manager</title>
-  <meta name="description" content="A free, independent Windows app that installs the Craft apps from getartcraft.com using their official releases, and tells you when there's a new version.">
+  <meta name="description" content="A free, independent app for Windows and Mac that installs the Craft apps from getartcraft.com using their official releases, and tells you when there's a new version.">
   <link rel="canonical" href="https://artcraftappsmanager.web.app/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="ArtCraft Apps Manager">
-  <meta property="og:description" content="An independent tool to install and update every Craft app on Windows. Free.">
+  <meta property="og:description" content="An independent tool to install and update every Craft app on Windows and Mac. Free.">
   <meta property="og:url" content="https://artcraftappsmanager.web.app/">
   <meta property="og:image" content="https://artcraftappsmanager.web.app/assets/og.png">
   <meta property="og:image:width" content="1200">
@@ -44,7 +44,7 @@
       <button class="btn icon-btn" type="button" data-theme-toggle aria-label="Switch between light and dark">
         <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 0 0 14.5z" fill="currentColor"/></svg>
       </button>
-      <a class="btn btn-primary top-download" href="/download/{{file}}" download data-download="header">Download</a>
+      <a class="btn btn-primary top-download" href="{{url}}" download data-download="header" data-mac-href="{{url_mac}}">Download</a>
     </div>
   </header>
 
@@ -52,17 +52,20 @@
     <section class="hero">
       <div class="wrap">
         <div class="hero-text">
-          <p class="hud">For Windows 10 and 11</p>
+          <p class="hud">For Windows and macOS</p>
           <h1>Every Craft app, installed and up to date.</h1>
           <p class="lead">ArtCraft Apps Manager installs PhotoCraft, VectorCraft, FilmCraft and the rest of the Craft apps from their official releases, then tells you when a new version is out.</p>
-          <div class="actions">
-            <a class="btn btn-primary btn-lg" href="/download/{{file}}" download data-download="hero">
+          <div class="actions" data-downloads>
+            <a class="btn btn-primary btn-lg" href="{{url}}" download data-download="hero" data-os="windows">
               <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5v9m0 0L4.5 7M8 10.5 11.5 7M2 14h12" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
               Download for Windows
             </a>
-            <a class="btn btn-lg" href="#apps">See the apps</a>
+            <a class="btn btn-lg" href="{{url_mac}}" download data-download="hero-mac" data-os="mac">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5v9m0 0L4.5 7M8 10.5 11.5 7M2 14h12" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+              Download for Mac
+            </a>
           </div>
-          <p class="hud meta">Version {{version}} <span>·</span> {{size}} <span>·</span> Free <span>·</span> <a href="/download/{{file_x86}}" download data-download="hero-x86">32-bit version</a></p>
+          <p class="hud meta">Version {{version}} <span>·</span> Free <span>·</span> <a href="{{url_x86}}" download data-download="hero-x86">32-bit Windows</a></p>
           <p class="aside">An independent project, not affiliated with ArtCraft. The apps are developed and supported by their creators at <a href="https://getartcraft.com/">getartcraft.com</a>.</p>
         </div>
         <figure class="shot">
@@ -90,7 +93,7 @@
           <li>
             <span class="hud">02</span>
             <h3>Update notifications</h3>
-            <p>Checks for new releases every few hours and shows a Windows notification when there's an update.</p>
+            <p>Checks for new releases every few hours and shows a notification when there's an update.</p>
           </li>
           <li>
             <span class="hud">03</span>
@@ -105,12 +108,12 @@
           <li>
             <span class="hud">05</span>
             <h3>Official installers</h3>
-            <p>Apps install with their own installers into Program Files, with Start menu entries, and uninstall from Windows Settings like any other app.</p>
+            <p>Apps install with their own official installers, into Program Files on Windows or Applications on a Mac, and uninstall like any other app.</p>
           </li>
           <li>
             <span class="hud">06</span>
             <h3>Stays out of the way</h3>
-            <p>Closing the window keeps it in the system tray. Starting with Windows is optional and off until you turn it on.</p>
+            <p>Closing the window keeps it in the system tray, or the menu bar on a Mac. Starting when you sign in is optional and off until you turn it on.</p>
           </li>
         </ul>
       </div>
@@ -120,7 +123,7 @@
       <div class="bar"><div class="wrap"><span class="hud">02 / The apps</span><span class="hud">12</span></div></div>
       <div class="wrap">
         <h2 id="apps-title">The apps it installs.</h2>
-        <p class="intro">New Craft apps show up in the manager automatically when they publish a Windows release.</p>
+        <p class="intro">New Craft apps show up in the manager automatically when they publish a Windows or Mac release.</p>
         <ul class="grid apps">
           <li class="app" style="--ink-l:#1a5bc4;--ink-d:#7fb0ff">
             <img src="/assets/apps/photocraft.png" alt="" width="56" height="56" loading="lazy">
@@ -182,28 +185,31 @@
           <li>
             <span class="step">1</span>
             <h3>Download</h3>
-            <p>Get the installer, a single {{size}} file.</p>
+            <p>Get the installer for Windows 10 or 11, or for macOS 11 or later.</p>
           </li>
           <li>
             <span class="step">2</span>
             <h3>Install</h3>
-            <p>Open it, follow the setup wizard and allow the change when Windows asks. It installs for everyone who uses the PC.</p>
+            <p>On Windows, open it, follow the setup wizard and allow the change when Windows asks. On a Mac, open the disk image and drag the app to Applications.</p>
           </li>
           <li>
             <span class="step">3</span>
             <h3>Pick your apps</h3>
-            <p>Open ArtCraft Apps Manager from the Start menu and press Install next to the apps you want.</p>
+            <p>Open ArtCraft Apps Manager from the Start menu or Applications and press Install next to the apps you want.</p>
           </li>
         </ol>
         <p class="note">If Windows SmartScreen says it protected your PC, choose <strong>More info</strong>, then <strong>Run anyway</strong>. Windows shows this for installers it hasn't seen many downloads of yet.</p>
+        <p class="note">On a Mac, the first time you open it, macOS may say it couldn't verify the app. Choose <strong>Done</strong>, open <strong>System Settings › Privacy &amp; Security</strong>, and choose <strong>Open Anyway</strong>. This is because the app isn't registered with Apple.</p>
         <dl class="spec">
           <div><dt class="hud">Version</dt><dd>{{version}}, released {{released}}</dd></div>
-          <div><dt class="hud">Requires</dt><dd>Windows 10 or 11</dd></div>
-          <div><dt class="hud">Installs to</dt><dd>C:\Program Files\ArtCraft Apps Manager</dd></div>
-          <div><dt class="hud">64-bit Windows</dt><dd><a href="/download/{{file}}" download data-download="details">{{file}}</a> ({{size}})</dd></div>
+          <div><dt class="hud">Requires</dt><dd>Windows 10 or 11, or macOS 11 or later</dd></div>
+          <div><dt class="hud">Installs to</dt><dd>C:\Program Files\ArtCraft Apps Manager, or Applications on a Mac</dd></div>
+          <div><dt class="hud">64-bit Windows</dt><dd><a href="{{url}}" download data-download="details">{{file}}</a> ({{size}})</dd></div>
           <div><dt class="hud">SHA-256</dt><dd class="hash">{{sha256}}</dd></div>
-          <div><dt class="hud">32-bit Windows</dt><dd><a href="/download/{{file_x86}}" download data-download="details-x86">{{file_x86}}</a> ({{size_x86}})</dd></div>
+          <div><dt class="hud">32-bit Windows</dt><dd><a href="{{url_x86}}" download data-download="details-x86">{{file_x86}}</a> ({{size_x86}})</dd></div>
           <div><dt class="hud">SHA-256</dt><dd class="hash">{{sha256_x86}}</dd></div>
+          <div><dt class="hud">Mac</dt><dd><a href="{{url_mac}}" download data-download="details-mac">{{file_mac}}</a> ({{size_mac}}), for Apple silicon and Intel</dd></div>
+          <div><dt class="hud">SHA-256</dt><dd class="hash">{{sha256_mac}}</dd></div>
         </dl>
       </div>
     </section>
@@ -219,7 +225,7 @@
           </details>
           <details>
             <summary>Where do the apps go?</summary>
-            <p>Each app installs with its own official installer into C:\Program Files, with a Start menu entry, just as if you'd downloaded it yourself. Windows asks for permission each time.</p>
+            <p>Each app installs with its own official installer, just as if you'd downloaded it yourself. On Windows it goes into C:\Program Files, with a Start menu entry, and Windows asks for permission each time. On a Mac it goes into Applications, and macOS asks for an administrator's password if you can't change that folder.</p>
           </details>
           <details>
             <summary>What happens to the old version when I update?</summary>
@@ -227,19 +233,19 @@
           </details>
           <details>
             <summary>Does it run all the time?</summary>
-            <p>Closing the window keeps it in the system tray so it can check for updates. To stop it, choose Quit from the tray icon. It only starts with Windows if you turn that on in its Settings.</p>
+            <p>Closing the window keeps it in the system tray, or the menu bar on a Mac, so it can check for updates. To stop it, choose Quit from that icon. It only starts when you sign in if you turn that on in its Settings.</p>
           </details>
           <details>
             <summary>Is there a 32-bit version?</summary>
-            <p>Yes, for 32-bit Windows 10: <a href="/download/{{file_x86}}" download data-download="faq-x86">{{file_x86}}</a> ({{size_x86}}). Windows 11 is always 64-bit, and so are most Windows 10 PCs, so most people need the main download. To check, open Settings › System › About and look at System type.</p>
+            <p>Yes, for 32-bit Windows 10: <a href="{{url_x86}}" download data-download="faq-x86">{{file_x86}}</a> ({{size_x86}}). Windows 11 is always 64-bit, and so are most Windows 10 PCs, so most people need the main download. To check, open Settings › System › About and look at System type.</p>
           </details>
           <details>
             <summary>How do I update the manager itself?</summary>
-            <p>Download the latest installer from this page and run it. It replaces the version you have.</p>
+            <p>Download the latest installer from this page. On Windows, run it and it replaces the version you have. On a Mac, quit the manager, then drag the new version to Applications and choose Replace.</p>
           </details>
           <details>
             <summary>How do I remove it?</summary>
-            <p>Choose Uninstall ArtCraft Apps Manager in the Start menu, or uninstall it from Settings › Apps › Installed apps. Either way, its settings and downloaded files are deleted too. The apps you installed with it stay installed.</p>
+            <p>On Windows, choose Uninstall ArtCraft Apps Manager in the Start menu, or uninstall it from Settings › Apps › Installed apps. Its settings and downloaded files are deleted too. On a Mac, turn off Open at login in its Settings if it's on, choose Quit from its menu bar icon, and move it from Applications to the Trash. Its settings stay in ~/Library/Application Support/ArtCraftAppsManager. Either way, the apps you installed with it stay installed.</p>
           </details>
         </div>
       </div>
@@ -272,11 +278,17 @@
       <div class="wrap">
         <h2 id="cta-title">Get the Craft apps in one place.</h2>
         <div>
-          <a class="btn btn-primary btn-lg" href="/download/{{file}}" download data-download="footer">
-            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5v9m0 0L4.5 7M8 10.5 11.5 7M2 14h12" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-            Download for Windows
-          </a>
-          <p class="hud meta">Version {{version}} <span>·</span> {{size}} <span>·</span> Free</p>
+          <div class="actions" data-downloads>
+            <a class="btn btn-primary btn-lg" href="{{url}}" download data-download="footer" data-os="windows">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5v9m0 0L4.5 7M8 10.5 11.5 7M2 14h12" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+              Download for Windows
+            </a>
+            <a class="btn btn-lg" href="{{url_mac}}" download data-download="footer-mac" data-os="mac">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5v9m0 0L4.5 7M8 10.5 11.5 7M2 14h12" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+              Download for Mac
+            </a>
+          </div>
+          <p class="hud meta">Version {{version}} <span>·</span> Free</p>
         </div>
       </div>
     </section>

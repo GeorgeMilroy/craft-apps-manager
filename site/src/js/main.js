@@ -15,6 +15,22 @@ document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
   } catch {}
 });
 
+// Mac visitors get the Mac download first and from the header button. iPads
+// also say they're Macs, but have touch screens, and can't run either app.
+const platform = navigator.userAgentData?.platform ?? navigator.platform ?? '';
+if (/mac/i.test(platform) && navigator.maxTouchPoints < 2) {
+  for (const group of document.querySelectorAll('[data-downloads]')) {
+    const mac = group.querySelector('[data-os="mac"]');
+    const windows = group.querySelector('[data-os="windows"]');
+    if (!mac || !windows) continue;
+    group.prepend(mac);
+    mac.classList.add('btn-primary');
+    windows.classList.remove('btn-primary');
+  }
+  const header = document.querySelector('[data-mac-href]');
+  if (header) header.href = header.dataset.macHref;
+}
+
 // The Hosting site serving this page: "artcraftappsmanager" for
 // artcraftappsmanager.web.app, its .firebaseapp.com twin and its preview
 // channels (artcraftappsmanager--<channel>.web.app). Any other address, such

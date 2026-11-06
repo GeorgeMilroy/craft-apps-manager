@@ -269,12 +269,10 @@ one in `Cargo.toml`.
 | `npm run build:installer:mac` | On a Mac, builds the macOS disk image (see below) |
 | `npm run build:site` | Builds the download page into `site\public` |
 | `npm run build` | Builds both installers, then the download page |
-| `npm run preview` | Builds the download page and serves it at http://127.0.0.1:5000 with the Firebase Hosting emulator. It works offline, without signing in, but doesn't apply the `/download` redirects |
-| `npm run deploy` | Builds the download page and publishes it (see below) |
-| `npm run release` | Builds both installers, then deploys |
+| `npm run preview` | Builds the download page and serves it at http://127.0.0.1:5000 with the Firebase Hosting emulator. It works offline, without signing in. The other sites are served from http://127.0.0.1:5005 to 5010, where they redirect |
+| `npm run deploy` | Builds the download page and publishes it with the service account key (see below) |
 
-Arguments after `--` go to the PowerShell script, for example
-`npm run deploy -- -KeyFile <path to the service account key>`.
+Arguments after `--` go to the PowerShell script.
 
 ### macOS
 
@@ -309,10 +307,11 @@ them attached, to check and publish.
 
 ## Download page
 
-`site\` is the download page. Firebase Hosting serves the same content from
-seven sites in the `getartcraftupdater` project. The main address, which
-search engines and shared links use, is artcraftappsmanager.web.app. The
-others are:
+`site\` is the download page, at artcraftappsmanager.web.app. It's one of
+seven Firebase Hosting sites in the `getartcraftupdater` project. The other
+six permanently redirect (301) every address to the same one there, keeping
+the path and query, so links such as getartcraftupdater.web.app/download
+still work:
 - artcraftapps.web.app
 - artcraftappsupdater.web.app
 - craftappsmanager.web.app
@@ -320,37 +319,54 @@ others are:
 - getartcraftmanager.web.app
 - getartcraftupdater.web.app
 
-`/download` on each one redirects to the newest 64-bit installer and
-`/download/x86` to the 32-bit one. `/latest.json` gives the version, and
-each installer's address, size and SHA-256.
+The installers themselves are downloaded from the version's GitHub
+release, not from Firebase: Firebase's free Spark plan refuses to host
+installers. `/download` redirects to the newest 64-bit Windows installer,
+`/download/x86` to the 32-bit one and `/download/mac` to the Mac disk image.
+Links to an older version's file, such as
+`/download/ArtCraftAppsManager-0.4.0-x64.msi`, get the newest one of the
+same kind.
+`/latest.json` gives the version, and each installer's address, size and
+SHA-256. Visitors on a Mac see the Mac download first.
 
-To publish a new version, build the installers, then run:
+To publish a new version:
+
+1. Push a tag for the version in `Cargo.toml` (such as `v0.4.1`). GitHub
+   builds the installers and drafts a release with them.
+2. Publish that release.
+3. Run `npm run deploy`, which runs:
 
 ```
 site\build.ps1 -Deploy -KeyFile <path to the service account key>
 ```
 
 The key is a Firebase service account key for the `getartcraftupdater`
-project. Keep it outside this folder. Without `-KeyFile`, the deploy uses the
-account the Firebase CLI is signed in with, which needs access to the
-project.
+project. Keep it outside this folder. `npm run deploy` uses the copy in
+`C:\Users\Milroy\Documents\Firebase Keys`; if it moves, update the path in
+`package.json`. Without `-KeyFile`, the deploy uses the account the
+Firebase CLI is signed in with, which needs access to the project.
 
-That copies both installers into `site\public`, fills in their version,
-sizes and checksums, and deploys to all seven sites. Without `-Deploy` it only
-builds. The site list and the Hosting settings they share are in
-`site\hosting.json`; the build turns them into `site\firebase.json`, with
-one entry per site.
+That reads the published GitHub release for the version in `Cargo.toml`,
+fills in each installer's address, size and the SHA-256 GitHub reports for
+it, and deploys the page to the main site and the redirect to the others. Without `-Deploy` it only builds. The sites and the
+main site's Hosting settings are in `site\hosting.json`; the build turns
+them into `site\firebase.json`, with one entry per site. The redirecting
+sites deploy `site\redirect`, which only has a fallback page.
 
-The page uses Firebase Analytics. All seven sites report to the same Google
-Analytics stream (`G-WPVYWX5H5V`, the "ArtCraft Apps Manager" web app), set
-in `site\src\js\config.js`. Every event, page views included, has a `site`
-parameter naming the site it came from; GA's built-in Hostname dimension
-shows the same. Local previews don't send anything.
+The page uses Firebase Analytics, reporting to the Google Analytics stream
+`G-WPVYWX5H5V` (the "ArtCraft Apps Manager" web app), set in
+`site\src\js\config.js`. Every event, page views included, has a `site`
+parameter naming the site it came from, which is now always
+artcraftappsmanager. Visits through the other addresses arrive as
+redirects, so they aren't counted separately. Local previews don't send
+anything.
 
 Download button clicks are logged as a `download_click` event, with these
 parameters:
-- `placement`: which button, `header`, `hero`, `details` or `footer`, or
-  for the 32-bit installer's links, `hero-x86`, `details-x86` or `faq-x86`;
+- `placement`: which button, `header`, `hero`, `details` or `footer`; for
+  the Mac links, `hero-mac`, `details-mac` or `footer-mac`; for the 32-bit
+  installer's links, `hero-x86`, `details-x86` or `faq-x86`. On a Mac the
+  `header` button downloads the Mac disk image;
 - `version`;
 - `file_name`.
 
